@@ -180,6 +180,9 @@ do
 	rm -f CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_SAMPLING.plot
 	rm -f CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.plot
 	rm -f CLEANER_TRIM_COMMITTED_EXTENTS_${name}_TOTAL.plot
+	echo "${name}" >> CLEANER_TRIM_COMMITTED_EXTENTS_${name}_TOTAL.plot
+	echo "${name}" >> CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_SAMPLING.plot
+	echo "${name}" >> CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.plot
 	for ((i=0;i<$1;i++))
 	do
 		total_val[$i]=$((orig_val[$((i*2))]+orig_val[$((i*2+1))]))
@@ -198,7 +201,7 @@ do
 	done
 	paste secs.log CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.plot &> CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.with_time.plot
 done
-paste secs.log CLEANER_TRIM_COMMITTED_EXTENTS_*_PER_CYCLE.plot &> CLEANER_TRIM_COMMITTED_EXTENTS_PER_CYCLE.plot
+paste secs.log CLEANER_TRIM_COMMITTED_EXTENTS_*_PER_CYCLE.plot &> CLEANER_TRIM_COMMITTED_EXTENTS_PER_CYCLE.with_time.plot
 
 
 unset io_blocked_count_trim
