@@ -19,4 +19,4 @@ plot 'CLEANER_TRIM_COMMITTED_EXTENTS_PER_CYCLE.with_time.plot' every ::2 using 1
 'CLEANER_TRIM_COMMITTED_EXTENTS_PER_CYCLE.with_time.plot' every ::2 using 1:14 title 'ROOT' with line, \
 'CLEANER_TRIM_COMMITTED_EXTENTS_PER_CYCLE.with_time.plot' every ::2 using 1:15 title 'TEST BLOCK' with line, \
 'CLEANER_TRIM_COMMITTED_EXTENTS_PER_CYCLE.with_time.plot' every ::2 using 1:16 title 'TEST BLOCK PHYSICAL' with line, \
-'CLEANER_TRIM_COMMITTED_EXTENTS_PER_CYCLE.with_time.plot' every ::2 using 1:($2+$3+$4+$5+$6+$7+$8+$9+$10+$11+$12+$13+$14+$15+$16) title 'ALLOC_TAIL' with line
+'CLEANER_TRIM_COMMITTED_EXTENTS_PER_CYCLE.with_time.plot' every ::2 using 1:($2+$3+$4+$5+$6+$7+$8+$9+$10+$11+$12+$13+$14+$15+$16) title 'TOTAL' with line
