@@ -404,3 +404,53 @@ do
 	accumulated_gc_backref_trimming_duration_per_sampling[$i]=$((${accumulated_gc_backref_trimming_duration[$i]}-${accumulated_gc_backref_trimming_duration[$(($i-1))]}))
 	echo ${accumulated_gc_backref_trimming_duration_per_sampling[$i]} >> accumulated_gc_backref_trimming_duration_per_sampling.plot
 done
+
+
+rm -f CLEANER_RECLAIM_COMMITTED_EXTENTS_*
+for name in `cat metrics.log |grep -A 5 cache_committed_extents|grep '\<ext\>'|awk -F'"' '{print $(NF-1)}'|sort |uniq`; do cat metrics.log |grep -A 5 cache_committed_extents|grep -A 1 -B 3 CLEANER_RECLAIM|grep -A 3 -B 1 "\<${name}\>"|grep -A 4 'FRESH_OOL\|FRESH_INLINE'|grep value|awk '{print $NF}' &> CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}.log; done
+paste CLEANER_RECLAIM_COMMITTED_EXTENTS_* &> CLEANER_RECLAIM_COMMITTED_EXTENTS.log
+cache_trans_committed_cleaner_trim=( `cat metrics.log |grep -A 3 '\<cache_trans_committed\>'|grep -A 1 'CLEANER_RECLAIM'|grep value|awk '{print $NF}'` )
+rm -f cache_trans_committed_cleaner_trim_per_sampling.plot
+declare -a cache_trans_committed_cleaner_trim_per_sampling
+for ((i=1;i<$1;i++))
+do
+	cache_trans_committed_cleaner_trim_per_sampling[$i]=$((${cache_trans_committed_cleaner_trim[$i]}-${cache_trans_committed_cleaner_trim[$(($i-1))]}))
+	echo ${cache_trans_committed_cleaner_trim_per_sampling[$i]} >> cache_trans_committed_cleaner_trim_per_sampling.plot
+done
+unset orig_val
+for name in `cat metrics.log |grep -A 5 cache_committed_extents|grep '\<ext\>'|awk -F'"' '{print $(NF-1)}'|sort |uniq`
+do
+	orig_val=( `cat CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}.log` )
+	unset total_val
+	unset per_sampling_val
+	unset per_cycle_val
+	declare -a total_val
+	declare -a per_sampling_val
+	declare -a per_cycle_val
+
+	rm -f CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_PER_SAMPLING.plot
+	rm -f CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.plot
+	rm -f CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_TOTAL.plot
+	echo "${name}" >> CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_TOTAL.plot
+	echo "${name}" >> CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_PER_SAMPLING.plot
+	echo "${name}" >> CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.plot
+	for ((i=0;i<$1;i++))
+	do
+		total_val[$i]=$((orig_val[$((i*2))]+orig_val[$((i*2+1))]))
+		echo "${total_val[$i]}" >> CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_TOTAL.plot
+	done
+	for ((i=1;i<$1;i++))
+	do
+		per_sampling_val[$i]=`echo "scale=4; ${total_val[$i]}-${total_val[$(($i-1))]}"|bc`
+		echo "${per_sampling_val[$i]}" >> CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_PER_SAMPLING.plot
+		if [ ${cache_trans_committed_cleaner_trim_per_sampling[$i]} -gt 0 ]; then
+			per_cycle_val[$i]=`echo "scale=4; ${per_sampling_val[$i]} / ${cache_trans_committed_cleaner_trim_per_sampling[$i]}"|bc`
+		else
+			per_cycle_val[$i]=0
+		fi
+		echo "${per_cycle_val[$i]}" >> CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.plot
+	done
+	paste secs.log CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.plot &> CLEANER_RECLAIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.with_time.plot
+done
+paste secs.log CLEANER_RECLAIM_COMMITTED_EXTENTS_*_PER_CYCLE.plot &> CLEANER_RECLAIM_COMMITTED_EXTENTS_PER_CYCLE.with_time.plot
+
