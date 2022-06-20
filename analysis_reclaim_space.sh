@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for ((i=1;i<$1;i++)); do echo $(($i*10)); done &> secs.log
+for ((i=1;i<=$1;i++)); do echo $(($i*10)); done &> secs.log
 unset reclaim_space_cycles
 
 cat metrics.log |grep -A 2 reclaim_space_cycle|grep value|awk '{print $NF}' &> segment_cleaner_reclaim_space_cycle.log
