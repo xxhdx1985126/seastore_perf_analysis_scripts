@@ -200,8 +200,10 @@ do
 		echo "${per_cycle_val[$i]}" >> CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.plot
 	done
 	paste secs.log CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.plot &> CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_CYCLE.with_time.plot
+	paste secs.log CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_SAMPLING.plot &> CLEANER_TRIM_COMMITTED_EXTENTS_${name}_PER_SAMPLING.with_time.plot
 done
 paste secs.log CLEANER_TRIM_COMMITTED_EXTENTS_*_PER_CYCLE.plot &> CLEANER_TRIM_COMMITTED_EXTENTS_PER_CYCLE.with_time.plot
+paste secs.log CLEANER_TRIM_COMMITTED_EXTENTS_*_PER_SAMPLING.plot &> CLEANER_TRIM_COMMITTED_EXTENTS_PER_SAMPLING.with_time.plot
 
 
 unset io_blocked_count_trim
