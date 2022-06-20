@@ -12,4 +12,4 @@ set title 'journal trim cycles(when io is blocked) per sampling interval'
 set ylabel 'number of cycles'
 set xlabel 'sampling point (1 per 10 secs)'
 set yrange [0:]
-plot 'journal_trim_cycles_per_sampling.plot' title 'journal trim cycles(when io is blocked) per sampling interval' with line
+plot 'journal_trim_io_blocked_cycles_per_sampling.plot' title 'journal trim cycles(when io is blocked) per sampling interval' with line
