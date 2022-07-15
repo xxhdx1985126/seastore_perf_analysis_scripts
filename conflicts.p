@@ -34,3 +34,10 @@ log_file2 using 1:10 title 'RETIRED\_PLACEHOLDER' with line, \
 log_file2 using 1:11 title 'ROOT' with line, \
 log_file2 using 1:12 title 'TEST\_BLOCK' with line, \
 log_file2 using 1:13 title 'TEST\_BLOCK\_PHYSICAL' with line
+
+set output 'journal_trim_repeats_per_cycle.png'
+set title 'avg num of repeats per journal trim trans'
+set ylabel 'avg num of repreats per journal trim trans'
+set xlabel 'time (secs)'
+set yrange [0:]
+plot 'journal_trim_repeats_per_cycle.with_time.plot' using 1:2 title 'avg num of repreats per journal trim trans' with line

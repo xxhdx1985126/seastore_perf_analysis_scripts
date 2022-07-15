@@ -55,6 +55,7 @@ do
 	fi
 	echo ${journal_trim_repeats_per_cycle[$i]} >> journal_trim_repeats_per_cycle.plot
 done
+paste secs.log journal_trim_repeats_per_cycle.plot &> journal_trim_repeats_per_cycle.with_time.plot
 
 unset journal_trim_duration
 cat metrics.log |grep -A 2 segment_cleaner_journal_trim_duration|grep value|awk '{print $NF}' &> segment_cleaner_journal_trim_duration.log

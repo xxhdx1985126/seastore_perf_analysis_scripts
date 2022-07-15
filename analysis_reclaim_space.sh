@@ -7,11 +7,13 @@ cat metrics.log |grep -A 2 reclaim_space_cycle|grep value|awk '{print $NF}' &> s
 
 reclaim_space_cycles=( `cat segment_cleaner_reclaim_space_cycle.log`)
 
+rm -f reclaim_space_cycles_per_sampling.plot
 unset reclaim_space_cycles_per_sampling
 declare -a reclaim_space_cycles_per_sampling
 for ((i=1;i<$1;i++))
 do
 	reclaim_space_cycles_per_sampling[$i]=$((${reclaim_space_cycles[$i]}-${reclaim_space_cycles[$(($i-1))]}))
+	echo ${reclaim_space_cycles_per_sampling[$i]} >> reclaim_space_cycles_per_sampling.plot
 done
 
 unset accumulated_get_live_extents_time
